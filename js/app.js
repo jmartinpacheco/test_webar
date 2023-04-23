@@ -1,11 +1,16 @@
-const unityInstance = UnityLoader.instantiate("unityContainer", "Build/arwt_web4_crash.json");
+const unityInstance = UnityLoader.instantiate("unityContainer", "Build/arwt_web2.json");
 let isCameraReady = false;
 let isDetectionManagerReady = false;
 let gl = null;
 
+let WebXR;
+window.ARWT = {}
+let xrSession = null;
+
 function cameraReady(){
     isCameraReady = true;
     gl = unityInstance.Module.ctx;
+    WebXR = unityInstance.Module.WebXR;
 }
 
 function detectionManagerReady(){
@@ -87,3 +92,71 @@ AFRAME.registerComponent('copycanvas', {
         unityCanvas.height = this.el.canvas.height
     } 
 });
+
+window.ARWT.onButtonClicked = () => {
+    if(!xrSession){
+        const options = !WebXR.imageTrackingRequired ?
+        {
+            requiredFeatures: ['local-floor', 'hit-test']
+        }
+        :
+        {
+            requiredFeatures: ['local-floor', 'image-tracking'],
+            trackedImages : imgsBitmap
+            // trackedImages: [
+            //     {
+            //         image: imgBitmap,
+            //         widthInMeters: 0.05
+            //     }
+            // ]
+        }
+        navigator.xr.requestSession('immersive-ar', options).then(onSessionStarted, onRequestSessionError);
+    }else{
+        xrSession.end();
+    }
+}
+
+function onSessionStarted(session) {
+    xrSession = session;
+
+    session.addEventListener('end', onSessionEnded);
+    session.addEventListener('select', onSelect);
+
+    let glLayer = new XRWebGLLayer(session, gl);
+    session.updateRenderState({ baseLayer: glLayer });
+
+    unityInstance.Module.canvas.width = glLayer.framebufferWidth;
+    unityInstance.Module.canvas.height = glLayer.framebufferHeight;
+
+    
+    // session.requestReferenceSpace('viewer').then((refSpace) => {
+    //     xrViewerSpace = refSpace;
+    //     // session.requestHitTestSource({ space: xrViewerSpace }).then((hitTestSource) => {
+    //     //     xrHitTestSource = hitTestSource;
+    //     // });
+       
+    // });
+   
+    if(!WebXR.imageTrackingRequired){
+        session.requestReferenceSpace('local').then((refSpace) => {
+            xrRefSpace = refSpace;
+            unityInstance.Module.InternalBrowser.requestAnimationFrame(frameDrawer);
+
+            session.requestHitTestSourceForTransientInput({ profile:'generic-touchscreen' }).then((hitTestSource) => {
+                xrTransientInputHitTestSource = hitTestSource;
+            });
+            
+        });
+    }else{
+        session.requestReferenceSpace('viewer').then((refSpace) => {
+            xrRefSpace = refSpace;
+            unityInstance.Module.InternalBrowser.requestAnimationFrame(frameDrawer);
+        });
+    }
+
+}
+
+function onRequestSessionError(ex) {
+    alert("Failed to start immersive AR session.");
+    console.error(ex.message);
+}
