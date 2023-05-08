@@ -4,26 +4,24 @@
     <meta charset="utf-8">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>SolarSyatem</title>
+    <title>MyWebBlippar</title>
     <link rel="shortcut icon" href="TemplateData/favicon.ico">
     <link rel="stylesheet" href="TemplateData/style.css">
-    
-<script src = "sdk/blippar-webar-sdk-v1.5.1/webar-sdk/webar-sdk-v1.5.1.min.js?license-key=43944568-80f9-4b4d-b51c-18a6be1f26d8 "
+
+<script src = "sdk/blippar-webar-sdk-v1.4.2/blippar/webar-sdk-v1.4.2.min.js?license-key=43944568-80f9-4b4d-b51c-18a6be1f26d8"
 webar-mode="surface-tracking"
-static-camera = "true"
     auto-start="false"
-    auto-init="false"
-auto-marker-detection ="true"
+    auto-init="true"
+    auto-marker-detection="true"
 show-guide-animation-url=""
 
     rendering-engine="unity"
-logo-src="images/blogo_new.png"
+logo-src="images/test_logo_here.png"
 logo-height="116px"
-logo-src="images/blogo_new.png"
 progress-dot-ring-scale="0.30"
-progress-dot-ring-color="#FFFFFF"
+progress-dot-ring-color="#00AAFF"
 progress-ring-scale="0.36"
-progress-ring-color="#FFC300"
+progress-ring-color="#00FFFF"
 progress-ring-line-width="5"
 
 alert-border-color="#00FFFF"
@@ -33,16 +31,12 @@ alert-message-text-color="#00AAFF"
 alert-button-color="#00FFFF"
 alert-button-text-color="#283747"
 alert-button-height="50px"
-alert-box-font-size="24px"
-alert-box-height="182px"
-alert-box-width="290px"
 alert-camera-permission-text="We need to ask for access to the camera so this experience can work!!!"
 alert-camera-permission-button-text="No Problem"
 alert-motion-permission-text="Now we need access to motion sensors!!!"
 alert-motion-permission-button-text="No Problem"
     
 ui-background-color="#283747"
-ui-portrait-text="This experience is optimized for portrait display"
 ui-text-color="#00FFFF"
 desktop-logo-src="images/test_desktop_logo.png"
 desktop-logo-width="108px"
@@ -50,37 +44,7 @@ desktop-logo-height="30px"
 issue-img-src="images/test_issue_img.png"
 issue-img-width="116px"
 issue-img-height="116px"
-
-auto-scan-instruction="Find a marker to scan..."
-auto-scan-instruction-detect="Marker detecting..."
-auto-scan-instruction-idle="Shake your phone to start detection"
-auto-scan-instruction-text-style="color: orange;"
-auto-scan-style="Display: block; position: absolute; top: 90%; left: 50%; transform: translate(-50%, -50%); z-index: 10000; width: auto; height: auto; text-alogn: center; "
-auto-scan-style-display="block"
-
-scan-btn-display="block"
-scan-btn-height="100px"
-scan-btn-width="100px"
-scan-btn-img-height="50"
-scan-btn-img-width="50"
-scan-btn-img-src="images/user_scan-btn-image_here.png"
-scan-btn-img-transform="translate(-25, -25)"
-scan-btn-img-x-coordinate="50%"
-scan-btn-img-y-coordinate="50%"
-
-scan-btn-instruction="Tap to scan"
-scan-btn-instruction-style="color: white;"
-scan-btn-progress-bar-color="blue"
-scan-btn-progress-bar-cx-coordinate="50"
-scan-btn-progress-bar-cy-coordinate="50"
-scan-btn-progress-bar-radius="35"
-scan-btn-progress-bar-transform="rotate(-90 50 50)"
-scan-btn-progress-circle-cx-coordinate="50%"
-scan-btn-progress-circle-cy-coordinate="50%"
-scan-btn-progress-circle-radius="35"
-scan-btn-progress-circle-style="fill: none; stroke: cyan; stroke-width: 6;"
-
-show-guide-view="true"></script>
+    show-guide-view="true"></script>
 
   </head>
   <body class="dark">
@@ -94,14 +58,14 @@ var UNITYINSTANCE = undefined;
 const cameraObjectName = "webarCamera";
 const stageObjectName = "webarStage";
       const buildUrl = "Build";
-      const loaderUrl = buildUrl + "/WebAR-SolarSyatem.loader.js";
+      const loaderUrl = buildUrl + "/WebAR-MyWebBlippar.loader.js";
       const config = {
-        dataUrl: buildUrl + "/WebAR-SolarSyatem.data",
-        frameworkUrl: buildUrl + "/WebAR-SolarSyatem.framework.js",
-        codeUrl: buildUrl + "/WebAR-SolarSyatem.wasm",
+        dataUrl: buildUrl + "/WebAR-MyWebBlippar.data",
+        frameworkUrl: buildUrl + "/WebAR-MyWebBlippar.framework.js",
+        codeUrl: buildUrl + "/WebAR-MyWebBlippar.wasm",
         streamingAssetsUrl: "StreamingAssets",
         companyName: "DefaultCompany",
-        productName: "SolarSyatem",
+        productName: "MyWebBlippar",
         productVersion: "0.1",
       };
 
@@ -120,7 +84,8 @@ const stageObjectName = "webarStage";
 
         }).then((unityInstance) => {
           UNITYINSTANCE  = unityInstance;
-          }).catch((message) => {
+          //console.log("Web AR Call : " + "cameraName- " + blipparCameraName + " " + "stageName- " + blipparStageName + " " + "blipparCanvas- " + canvas.id);
+        }).catch((message) => {
           alert(message);
         });
       };
