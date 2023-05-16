@@ -1,4 +1,4 @@
-const unityInstance = UnityLoader.instantiate("unityContainer", "Build/arwt_web2.json");
+//const unityInstance = UnityLoader.instantiate("unityContainer", "%UNITY_WEBGL_BUILD_URL%");  
 let isCameraReady = false;
 let isDetectionManagerReady = false;
 let gl = null;
@@ -55,9 +55,9 @@ AFRAME.registerComponent('cameratransform', {
         const rotCam = `${[...camro.toArray()]}`
  
         if(isCameraReady){
-            unityInstance.SendMessage("Main Camera", "setProjection", serializedProj);
-            unityInstance.SendMessage("Main Camera", "setPosition", posCam);
-            unityInstance.SendMessage("Main Camera", "setRotation", rotCam);
+            unityInstance.SendMessage("CameraMain", "setProjection", serializedProj);
+            unityInstance.SendMessage("CameraMain", "setPosition", posCam);
+            unityInstance.SendMessage("CameraMain", "setRotation", rotCam);
 
             let w = window.innerWidth;
             let h = window.innerHeight; 

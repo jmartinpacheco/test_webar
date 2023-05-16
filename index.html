@@ -6,23 +6,71 @@
     <title>Unity WebGL Player | WebGL Test AR</title>
     <script src="js/lib/aframe.min.js"></script>
     <script src="js/lib/aframe-ar.js"></script>
-    <script src="Build/UnityLoader.js"></script>
-    <script src="js/app.js"></script>
-
   </head>
 
   <body style="margin: 0px; overflow: hidden;">
     <a-scene embedded arjs vr-mode-ui="enabled: false" copycanvas>
-      <div id="unityContainer" style="z-index: 2" ></div>
-      <!-- <a-marker preset="hiro"> <a-box></a-box> </a-marker> -->
-      <!-- <a-marker type="pattern" url="data/markers/pattern-arjs.patt"><a-box></a-box></a-marker> -->
-      <!-- <a-marker type="pattern" url="data/markers/test.patt" markercontroller="name : hiro"></a-marker> -->
-
-			<a-marker type="pattern" url="data/markers/Hiro.patt" markercontroller="name : Hiro"></a-marker>
-			<a-marker type="pattern" url="data/markers/Nutty.patt" markercontroller="name : Nutty"></a-marker>
-			<a-marker type="pattern" url="data/markers/NuttyCardboard.patt" markercontroller="name : NuttyCardboard"></a-marker>
-
+      <div id="unity-container">
+        <div id="unity-canvas-container" style="width: 100%; height: 100%;">
+          <canvas id="unity-canvas" style="width: 100%; height: 100%;"></canvas>
+        </div>
+        <div id="unity-loading-bar">
+          <div id="unity-logo"></div>
+          <div id="unity-progress-bar-empty">
+            <div id="unity-progress-bar-full"></div>
+          </div>
+        </div>
+      </div>
       <a-entity camera cameratransform></a-entity>
     </a-scene>
+
+    <script>
+      var buildUrl = "Build";
+      var loaderUrl = buildUrl + "/arwt_web2.loader.js";
+      var config = {
+        dataUrl: buildUrl + "/arwt_web2.data",
+        frameworkUrl: buildUrl + "/arwt_web2.framework.js",
+        codeUrl: buildUrl + "/arwt_web2.wasm",
+        streamingAssetsUrl: "StreamingAssets",
+        companyName: "MediosAlterados",
+        productName: "Maybelline",
+        productVersion: "0.1",
+      };
+
+      var container = document.querySelector("#unity-container");
+      var canvas = document.querySelector("#unity-canvas");
+      var canvasContainer = document.querySelector("#unity-canvas-container");
+      var loadingBar = document.querySelector("#unity-loading-bar");
+      var progressBarFull = document.querySelector("#unity-progress-bar-full");
+      var fullscreenButton = document.querySelector("#unity-fullscreen-button");
+      var unityInstance = null;
+      
+
+      loadingBar.style.display = "block";
+
+      var script = document.createElement("script");
+      script.src = loaderUrl;
+      script.onload = () => {
+        createUnityInstance(canvas, config, (progress) => {
+          progressBarFull.style.width = 100 * progress + "%";
+        }).then((instance) => {
+          unityInstance = instance;
+          loadingBar.style.display = "none";
+          if (fullscreenButton)
+          {
+            fullscreenButton.onclick = () => {
+              unityInstance.SetFullscreen(1);
+            };
+          }
+        }).catch((message) => {
+          alert(message);
+        });
+      };
+      document.body.appendChild(script);
+
+
+    </script>
+    <script src="js/app.js"></script>
+
   </body>
 </html>
