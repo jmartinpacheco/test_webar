@@ -93,11 +93,6 @@
                     window.unityInstance = unityInstance;
                     window.iTracker.startWebcam();
 
-console.info(DATA_FILENAME);
-                console.info(FRAMEWORK_FILENAME);
-                console.info(CODE_FILENAME);
-                console.info(MEMORY_FILENAME);
-                console.info(SYMBOLS_FILENAME);
                 
                     //[FIX]: some browsers (such as Wechat) does not allow webcam autoplay so we need to start the webcam manually via new button press
                     window.waitForVideo = () => {
